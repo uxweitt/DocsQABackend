@@ -22,11 +22,3 @@ def prompt_with_context(vector_store, request: ModelRequest) -> str:
     )
 
     return system_message
-
-agent = create_agent(model, tools=[], middleware=[prompt_with_context])
-query = "What is task decomposition?"
-for step in agent.stream(
-    {"messages": [{"role": "user", "content": query}]},
-    stream_mode="values",
-):
-    step["messages"][-1].pretty_print()
