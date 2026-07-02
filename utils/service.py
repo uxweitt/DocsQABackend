@@ -18,6 +18,8 @@ def exctract_from_md(path: str) -> Document:
     text = ""
     with open(path, 'r') as md_file:
         text = md_file.read()
+    if not text:
+        raise ValueError("PDF has no extracteble text")
     return Document(
         page_content=text,
         metadata={},

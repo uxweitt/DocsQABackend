@@ -1,5 +1,5 @@
-from online_part import prompt_with_context
-from offline_part import (
+from utils.online_part import make_prompt_with_context
+from utils.offline_part import (
     create_model,
     create_embeddings,
     create_text_splitter,
@@ -22,16 +22,16 @@ class Pipeline:
         self.agent = create_agent(
             self.model,
             tools=[],
-            middleware=[prompt_with_context]
+            middleware=[make_prompt_with_context(self.vector_store)]
         )
     
     def offline_pipeline(self, docs):
         splits = split_text(self.text_splitter, docs)
         doc_ids = update_db(self.vector_store, splits)
+        return len(splits)
         
     def online_pipeline(self, query):
-        for step in self.agent.stream(
-            {"messages": [{"role": "user", "content": query}]},
-            stream_model="values"
-        ):
-            step["messages"][-1].pretty_print()
+        result = self.agent.invoke(
+            {"messages": [{"role": "user", "content": query}]}
+        )
+        return result["messages"][-1].content

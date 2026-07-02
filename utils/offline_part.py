@@ -7,7 +7,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 # Инициализация модели
 def create_model(model_name: str = "owl-alpha") -> ChatOpenRouter:
     return ChatOpenRouter(
-        model_name,
+        model=model_name,
         )
 
 # Инициализация эмбединг модели
@@ -25,7 +25,7 @@ def connect_to_pgvector(embeddings, collection_name: str) -> PGVector:
     return PGVector(
         embeddings=embeddings,
         collection_name=collection_name,
-        connection="postgresql+psycopg://...",
+        connection="postgresql+psycopg://postgres:postgres@localhost:5432/example_db",
     )
 
 # текст сплитер
